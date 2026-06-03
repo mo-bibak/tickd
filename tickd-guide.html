@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tickd — Team Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=IBM+Plex+Sans+Condensed:wght@400;600;700&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#0a0b0a;--bg-card:#101213;--bg-card2:#16191b;--bg-rail:#1d2024;
+    --border:rgba(232,228,216,0.10);--rule:rgba(232,228,216,0.18);
+    --text:#e8e4d8;--text2:rgba(232,228,216,0.62);--text3:rgba(232,228,216,0.36);
+    --accent:#ffb454;--accent-g:rgba(255,180,84,0.22);--accent-l:rgba(255,180,84,0.08);
+    --ok:#6ee787;--danger:#ff3838;
+    --font-mono:'JetBrains Mono','SF Mono','Menlo',monospace;
+    --font-ui:'IBM Plex Sans Condensed','IBM Plex Sans','Helvetica Neue',sans-serif;
+    --font-body:'IBM Plex Sans','Helvetica Neue',sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--text);font-family:var(--font-body);font-size:15px;line-height:1.7;min-height:100vh;-webkit-font-smoothing:antialiased}
+  body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;background-image:repeating-linear-gradient(0deg,rgba(255,255,255,0.012) 0,rgba(255,255,255,0.012) 1px,transparent 1px,transparent 3px);mix-blend-mode:overlay}
+
+  .hdr{background:var(--bg-card);border-bottom:1px solid var(--rule);padding:13px 0 12px;position:sticky;top:0;z-index:10;position:relative}
+  .hdr::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:1px;background:linear-gradient(90deg,transparent 0,var(--accent) 12%,var(--accent) 88%,transparent 100%);opacity:.55}
+  .hdr-inner{max-width:860px;margin:0 auto;padding:0 32px;display:flex;align-items:center;justify-content:space-between}
+  .logo-area{display:flex;align-items:center;gap:14px;padding-right:18px;border-right:1px solid var(--border)}
+  .logo-area svg{width:30px;height:24px}
+  .logo-text{font-family:var(--font-mono);font-size:12px;font-weight:500;color:var(--text);letter-spacing:1.6px;text-transform:uppercase}
+  .logo-sub{font-family:var(--font-mono);font-size:10px;color:var(--text3);letter-spacing:1.4px;text-transform:uppercase;margin-top:2px}
+  .logo-sub::before{content:"// "}
+
+  .wrap{max-width:860px;margin:0 auto;padding:0 32px;position:relative;z-index:1}
+
+  .hero{padding:48px 0 40px;border-bottom:1px solid var(--border)}
+  .eyebrow{font-family:var(--font-mono);font-size:10px;color:var(--accent);letter-spacing:2.4px;text-transform:uppercase;margin-bottom:16px;opacity:.85}
+  .eyebrow::before{content:"◆  "}
+  .hero h1{font-family:var(--font-ui);font-size:clamp(26px,4vw,40px);font-weight:700;line-height:1.1;letter-spacing:-0.01em;color:var(--text);margin-bottom:10px}
+  .hero h1 em{font-style:normal;color:var(--accent)}
+  .hero p{font-size:14px;color:var(--text2);max-width:500px;font-weight:300;line-height:1.65}
+
+  .sh{padding:40px 0 16px}
+  .sh h2{font-family:var(--font-mono);font-size:10px;font-weight:700;color:var(--accent);letter-spacing:2.4px;text-transform:uppercase;margin-bottom:7px;opacity:.85}
+  .sh h2::before{content:"◆  "}
+  .sh p{font-family:var(--font-ui);font-size:20px;font-weight:700;color:var(--text);letter-spacing:-0.01em;line-height:1.2}
+
+  .tip{display:inline-flex;align-items:center;margin-top:9px;font-family:var(--font-mono);font-size:11px;color:var(--accent);background:var(--accent-l);border:1px solid rgba(255,180,84,0.2);padding:3px 9px;border-radius:2px;letter-spacing:.04em}
+  .tip::before{content:"// ";opacity:.5}
+  .warn{display:inline-flex;align-items:center;margin-top:9px;font-family:var(--font-mono);font-size:11px;color:var(--danger);background:rgba(255,56,56,0.06);border:1px solid rgba(255,56,56,0.18);padding:3px 9px;border-radius:2px;letter-spacing:.04em}
+  .warn::before{content:"▲  ";opacity:.7}
+
+  .compare{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border:1px solid var(--border);border-radius:3px;overflow:hidden;margin-bottom:28px}
+  .cmp{background:var(--bg-card);padding:22px}
+  .cmp-head{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+  .cmp-icon{font-size:17px}
+  .cmp-title{font-family:var(--font-ui);font-size:14px;font-weight:700;color:var(--accent)}
+  .cmp-sub{font-size:12px;color:var(--text3);margin-bottom:12px;font-style:italic}
+  .cmp ul{list-style:none;display:flex;flex-direction:column;gap:6px}
+  .cmp li{font-size:12.5px;color:var(--text2);display:flex;gap:8px;align-items:flex-start}
+  .cmp li::before{content:"·";color:var(--accent);flex-shrink:0;opacity:.6;margin-top:1px}
+
+  .playbook{border:1px solid var(--border);border-radius:3px;overflow:hidden;margin-bottom:28px}
+  .pb-row{background:var(--bg-card);border-bottom:1px solid var(--border);display:grid;grid-template-columns:150px 64px 1fr;align-items:stretch}
+  .pb-row:last-child{border-bottom:none}
+  .pb-row:hover{background:var(--bg-card2)}
+  .pb-name{font-family:var(--font-ui);font-size:13px;font-weight:700;color:var(--accent);padding:14px 16px;border-right:1px solid var(--border);display:flex;align-items:flex-start}
+  .pb-hours{font-family:var(--font-mono);font-size:11px;color:var(--text3);padding:14px 12px;border-right:1px solid var(--border);letter-spacing:.8px;display:flex;align-items:flex-start;white-space:nowrap}
+  .pb-tasks{padding:12px 16px;display:flex;flex-wrap:wrap;gap:4px;align-content:flex-start}
+  .pb-task{font-size:11px;color:var(--text2);background:var(--bg-rail);border:1px solid var(--border);padding:2px 7px;border-radius:2px;line-height:1.5}
+
+  .features{border:1px solid var(--border);border-radius:3px;overflow:hidden;margin-bottom:28px}
+  .feat{background:var(--bg-card);border-bottom:1px solid var(--border);padding:18px 20px;display:grid;grid-template-columns:32px 1fr;gap:14px;align-items:start;transition:background .15s}
+  .feat:last-child{border-bottom:none}
+  .feat:hover{background:var(--bg-card2)}
+  .feat-icon{width:32px;height:32px;background:var(--accent-l);border:1px solid rgba(255,180,84,0.18);border-radius:2px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;margin-top:1px}
+  .feat h3{font-family:var(--font-ui);font-size:13px;font-weight:700;color:var(--text);margin-bottom:4px}
+  .feat p{font-size:13px;color:var(--text2);line-height:1.6}
+
+  .tabs-legend{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:3px;overflow:hidden;margin-bottom:28px}
+  .tab-item{background:var(--bg-card);padding:16px;transition:background .15s}
+  .tab-item:hover{background:var(--bg-card2)}
+  .tab-name{font-family:var(--font-ui);font-size:13px;font-weight:700;color:var(--accent);margin-bottom:4px}
+  .tab-desc{font-size:11.5px;color:var(--text3);line-height:1.5}
+
+  .naming{background:var(--bg-card);border:1px solid var(--border);border-radius:3px;padding:20px 22px;margin-bottom:28px;display:flex;align-items:center;gap:22px}
+  .naming-label{font-family:var(--font-mono);font-size:10px;color:var(--text3);letter-spacing:1.8px;text-transform:uppercase;margin-bottom:5px}
+  .naming-code{font-family:var(--font-mono);font-size:17px;font-weight:500;color:var(--accent);letter-spacing:1px}
+  .naming-divider{width:1px;height:44px;background:var(--border);flex-shrink:0}
+  .naming-desc{font-size:13px;color:var(--text2);line-height:1.6}
+
+  .footer{border-top:1px solid var(--rule);padding:24px 0 40px;display:flex;align-items:center;justify-content:flex-end;position:relative;margin-top:8px}
+  .footer::before{content:"";position:absolute;left:0;right:0;top:-1px;height:1px;background:linear-gradient(90deg,transparent 0,var(--accent) 12%,var(--accent) 88%,transparent 100%);opacity:.35}
+  .footer-badge{font-family:var(--font-mono);font-size:10px;font-weight:700;color:var(--accent);background:var(--accent-l);border:1px solid rgba(255,180,84,0.25);padding:5px 12px;border-radius:2px;letter-spacing:1.8px;white-space:nowrap;text-transform:uppercase}
+
+  @media(max-width:640px){
+    .compare{grid-template-columns:1fr}
+    .tabs-legend{grid-template-columns:1fr 1fr}
+    .pb-row{grid-template-columns:1fr}
+    .pb-hours,.pb-name{border-right:none;border-bottom:1px solid var(--border)}
+    .naming{flex-direction:column;align-items:flex-start}
+    .naming-divider{display:none}
+    .wrap,.hdr-inner{padding:0 18px}
+  }
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="hdr-inner">
+    <div class="logo-area">
+      <svg viewBox="560 330 430 350" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="lgA" x1="573.65" y1="441.21" x2="966.98" y2="441.21" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-color="#ffb454"/>
+            <stop offset="1" stop-color="#ff8c42"/>
+          </linearGradient>
+          <linearGradient id="lgB" x1="666.87" y1="538.21" x2="913.09" y2="538.21" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-color="#ffb454"/>
+            <stop offset="1" stop-color="#ff8c42"/>
+          </linearGradient>
+        </defs>
+        <polygon fill="url(#lgA)" points="573.65 444.21 573.65 341.54 966.98 341.54 726.98 540.87 703.65 526.87 703.65 444.87 573.65 444.21"/>
+        <polygon fill="url(#lgB)" points="729.54 559.76 913.09 410.43 776.65 603.32 776.65 665.98 666.87 665.98 666.87 525.98 729.54 559.76"/>
+      </svg>
+      <div>
+        <div class="logo-text">Tickd</div>
+        <div class="logo-sub">Team Guide</div>
+      </div>
+    </div>
+    <div style="font-family:var(--font-mono);font-size:10px;color:var(--accent);letter-spacing:1.8px;text-transform:uppercase;opacity:.7">Longform Team · 2026</div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <div class="hero">
+    <div class="eyebrow">How to use Tickd</div>
+    <h1>Track time.<br><em>Own your edit.</em></h1>
+    <p>A shared time tracker for the Longform team. Know where every hour goes — and get sharper at estimating every project.</p>
+  </div>
+
+  <div class="sh"><h2>Get started</h2><p>Three steps</p></div>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:3px;overflow:hidden;margin-bottom:28px">
+    <div style="background:var(--bg-card);padding:20px">
+      <div style="font-family:var(--font-mono);font-size:10px;font-weight:700;color:var(--accent);letter-spacing:1.6px;margin-bottom:7px;opacity:.7">STEP 01</div>
+      <div style="font-family:var(--font-ui);font-size:13px;font-weight:700;color:var(--text);margin-bottom:4px">Sign in</div>
+      <div style="font-size:12px;color:var(--text3);line-height:1.5">Click the magic link sent to your work email. No password needed.</div>
+    </div>
+    <div style="background:var(--bg-card);padding:20px;border-left:1px solid var(--border)">
+      <div style="font-family:var(--font-mono);font-size:10px;font-weight:700;color:var(--accent);letter-spacing:1.6px;margin-bottom:7px;opacity:.7">STEP 02</div>
+      <div style="font-family:var(--font-ui);font-size:13px;font-weight:700;color:var(--text);margin-bottom:4px">Open your project</div>
+      <div style="font-size:12px;color:var(--text3);line-height:1.5">Your projects are listed on the home screen. Team projects show View →</div>
+    </div>
+    <div style="background:var(--bg-card);padding:20px;border-left:1px solid var(--border)">
+      <div style="font-family:var(--font-mono);font-size:10px;font-weight:700;color:var(--accent);letter-spacing:1.6px;margin-bottom:7px;opacity:.7">STEP 03</div>
+      <div style="font-family:var(--font-ui);font-size:13px;font-weight:700;color:var(--text);margin-bottom:4px">Hit play &amp; work</div>
+      <div style="font-size:12px;color:var(--text3);line-height:1.5">Start the section timer when you begin. Stop when you stop or switch.</div>
+    </div>
+  </div>
+
+  <div class="sh"><h2>Project ID</h2><p>How to name your projects</p></div>
+  <div class="naming">
+    <div>
+      <div class="naming-label">Format</div>
+      <div class="naming-code">LF-### [Title]</div>
+    </div>
+    <div class="naming-divider"></div>
+    <div class="naming-desc">
+      Every project gets a Longform ID — e.g. <strong style="color:var(--accent);font-weight:500">LF-671</strong>. Use the same ID for your Frame.io link, Notion entry, and your exported file name so everything stays connected.<br><br>
+      <span style="font-family:var(--font-mono);font-size:11px;color:var(--text3)">// Example: LF-671 Every Level of Claude Explained</span>
+    </div>
+  </div>
+
+  <div class="sh"><h2>Project Type</h2><p>Sections vs Stages — pick what fits your workflow</p></div>
+  <div class="compare">
+    <div class="cmp">
+      <div class="cmp-head"><span class="cmp-icon">▦</span><span class="cmp-title">Sections</span></div>
+      <div class="cmp-sub">Best for scripted content with multiple points</div>
+      <ul>
+        <li>One card per video point (Hook, Point 1–16, Ending)</li>
+        <li>Every section gets the same task checklist automatically</li>
+        <li>Default tasks: Narrative Cut, B-Roll, Music &amp; SFX, Text, Graphics, Roadmap, Mute swearing</li>
+        <li>Set the number of sections when creating the project</li>
+      </ul>
+    </div>
+    <div class="cmp">
+      <div class="cmp-head"><span class="cmp-icon">≡</span><span class="cmp-title">Stages</span></div>
+      <div class="cmp-sub">Best for tracking workflow by edit craft stage</div>
+      <ul>
+        <li>One card per edit stage (Narrative Cut, B-Roll, Music &amp; SFX…)</li>
+        <li>Each stage has a quality-control checklist from the edit playbook</li>
+        <li>Optional sub-tasks via + — add frame-specific or custom items</li>
+        <li>Time budget pre-assigned per stage based on 40h total</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="sh"><h2>Stages Playbook</h2><p>Built-in quality checklist per stage</p></div>
+  <div class="playbook">
+    <div class="pb-row">
+      <div class="pb-name">Narrative Cut</div><div class="pb-hours">4h</div>
+      <div class="pb-tasks">
+        <span class="pb-task">No pauses &gt;1.5 sec</span><span class="pb-task">Audio cuts clean (2-frame handles)</span><span class="pb-task">Voice at ~-6dB</span><span class="pb-task">Every sentence supports main point</span><span class="pb-task">Markers placed for B-roll, graphics, SFX</span>
+      </div>
+    </div>
+    <div class="pb-row">
+      <div class="pb-name">B-Roll</div><div class="pb-hours">6h</div>
+      <div class="pb-tasks">
+        <span class="pb-task">Supports idea, not individual words</span><span class="pb-task">3+ shots before returning to A-roll</span><span class="pb-task">Sequences total 3+ seconds</span><span class="pb-task">Cuts align with beats, never mid-word</span><span class="pb-task">Sensitive info blurred</span><span class="pb-task">Brightness/color matched</span>
+      </div>
+    </div>
+    <div class="pb-row">
+      <div class="pb-name">Music &amp; SFX</div><div class="pb-hours">2h</div>
+      <div class="pb-tasks">
+        <span class="pb-task">Song changes at hook → point 1</span><span class="pb-task">Music -18dB to -32dB</span><span class="pb-task">SFX supports without overpowering</span><span class="pb-task">Smooth transitions</span><span class="pb-task">Risers/hits in hook</span>
+      </div>
+    </div>
+    <div class="pb-row">
+      <div class="pb-name">Text &amp; Graphics</div><div class="pb-hours">2h</div>
+      <div class="pb-tasks">
+        <span class="pb-task">Readable in 1 sec on phone</span><span class="pb-task">Words appear as Dan says them</span><span class="pb-task">Text copied from transcript (zero typos)</span><span class="pb-task">Animations use easing, min 30 frames</span><span class="pb-task">All stats/quotes/names verified</span>
+      </div>
+    </div>
+    <div class="pb-row">
+      <div class="pb-name">Roadmap</div><div class="pb-hours">8h</div>
+      <div class="pb-tasks">
+        <span class="pb-task">Point count confirmed from script</span><span class="pb-task">Title tied to video promise</span><span class="pb-task">Shape adapts to point count</span><span class="pb-task">Progressive reveal plan</span>
+      </div>
+    </div>
+    <div class="pb-row">
+      <div class="pb-name">Miscellaneous</div><div class="pb-hours">2h</div>
+      <div class="pb-tasks">
+        <span class="pb-task">File named: LF-### [Title]</span><span class="pb-task">Saved in /06 Export folder</span><span class="pb-task">Frame.io link → Notion</span><span class="pb-task">Export podcast .mp3</span><span class="pb-task">All profanity muted/bleeped</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="sh"><h2>Navigation</h2><p>Four tabs inside every project</p></div>
+  <div class="tabs-legend">
+    <div class="tab-item"><div class="tab-name">Checklist</div><div class="tab-desc">Main workspace. Timers, task lists, version selector.</div></div>
+    <div class="tab-item"><div class="tab-name">Calendar</div><div class="tab-desc">Sections auto-scheduled over 4 edit days. Drag to reschedule.</div></div>
+    <div class="tab-item"><div class="tab-name">Script</div><div class="tab-desc">Upload your script (PDF, MD, TXT). Renders inline for reference.</div></div>
+    <div class="tab-item"><div class="tab-name">Forest</div><div class="tab-desc">52-week visual map. Completed projects grow into trees.</div></div>
+  </div>
+
+  <div class="sh"><h2>Features</h2><p>What's inside</p></div>
+  <div class="features">
+
+    <div class="feat">
+      <div class="feat-icon">⏱</div>
+      <div>
+        <h3>Timers &amp; Time Budget</h3>
+        <p>Every section or stage has a count-up timer and a countdown based on its share of the 40-hour total. The overall timer at the top sums everything across all sections.</p>
+        <span class="tip">Switch timers when you switch sections</span>
+      </div>
+    </div>
+
+    <div class="feat">
+      <div class="feat-icon">✍️</div>
+      <div>
+        <h3>Manual Time Entry</h3>
+        <p>Forgot to start the timer? Use the ✎ button on any section to add or subtract time manually. The adjustment is logged in analytics and counted in your overall time.</p>
+      </div>
+    </div>
+
+    <div class="feat">
+      <div class="feat-icon">🔁</div>
+      <div>
+        <h3>Version Tracking (V1, V2…)</h3>
+        <p>V1 is your main edit. Add versions for revisions — each has its own timer and checklist. Import Frame.io comments (CSV or TXT) to auto-generate a revision checklist from timecodes. The Overall Time filter lets you view V1 only, all versions, or a custom selection.</p>
+        <span class="tip">Default calendar day for V2+ is the 5th working day from project start</span>
+      </div>
+    </div>
+
+    <div class="feat">
+      <div class="feat-icon">👥</div>
+      <div>
+        <h3>Team View</h3>
+        <p>Open any teammate's project to see their progress in real time. A <strong style="color:var(--accent);font-weight:500">VIEWING ONLY · READ-ONLY</strong> banner appears — you can browse but not edit.</p>
+      </div>
+    </div>
+
+    <div class="feat">
+      <div class="feat-icon">📊</div>
+      <div>
+        <h3>Analytics &amp; Score</h3>
+        <p>Every project gets a score out of 5.0 based on five criteria. Open it anytime from the <strong style="color:var(--accent);font-weight:500">···</strong> menu → Analytics. The Daily Activity chart shows tasks or hours per day in <strong style="color:var(--accent);font-weight:500">Bar</strong> or <strong style="color:var(--accent);font-weight:500">Line</strong> view. The Compare section shows your score against other projects and your historical average.</p>
+        <div style="margin-top:10px;border:1px solid var(--border);border-radius:3px;overflow:hidden">
+          <div style="display:grid;grid-template-columns:1fr 1fr auto;background:var(--bg-rail);padding:7px 12px;font-family:var(--font-mono);font-size:10px;color:var(--text3);letter-spacing:1px;text-transform:uppercase;border-bottom:1px solid var(--border)">
+            <span>Criterion</span><span>What it measures</span><span>Max</span>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr auto;padding:9px 12px;font-size:12px;color:var(--text2);border-bottom:1px solid var(--border);background:var(--bg-card)">
+            <span style="color:var(--text);font-weight:500">Time Management</span><span>Total time vs 40h budget</span><span style="font-family:var(--font-mono);color:var(--accent)">1.0</span>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr auto;padding:9px 12px;font-size:12px;color:var(--text2);border-bottom:1px solid var(--border);background:var(--bg-card)">
+            <span style="color:var(--text);font-weight:500">Section Accuracy</span><span>Sections completed on time</span><span style="font-family:var(--font-mono);color:var(--accent)">1.0</span>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr auto;padding:9px 12px;font-size:12px;color:var(--text2);border-bottom:1px solid var(--border);background:var(--bg-card)">
+            <span style="color:var(--text);font-weight:500">Section Delays</span><span>Sections with no overrun</span><span style="font-family:var(--font-mono);color:var(--accent)">1.5</span>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr auto;padding:9px 12px;font-size:12px;color:var(--text2);border-bottom:1px solid var(--border);background:var(--bg-card)">
+            <span style="color:var(--text);font-weight:500">Task Completion</span><span>Tasks checked off (all versions)</span><span style="font-family:var(--font-mono);color:var(--accent)">1.0</span>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr auto;padding:9px 12px;font-size:12px;color:var(--text2);background:var(--bg-card)">
+            <span style="color:var(--text);font-weight:500">Deadline</span><span>Delivered within 5-day target</span><span style="font-family:var(--font-mono);color:var(--accent)">0.5</span>
+          </div>
+        </div>
+        <span class="warn">Going over budget on any section affects your score negatively</span>
+      </div>
+    </div>
+
+    <div class="feat">
+      <div class="feat-icon">🔴</div>
+      <div>
+        <h3>IDLE / ACTIVE Indicator</h3>
+        <p><strong style="color:var(--ok)">ACTIVE</strong> = a timer is running and syncing live. <strong style="color:var(--text3)">IDLE</strong> = no timer running. If sync looks stuck, refresh the page.</p>
+      </div>
+    </div>
+
+    <div class="feat">
+      <div class="feat-icon">👁</div>
+      <div>
+        <h3>Eye Care Reminders</h3>
+        <p>Every 20 minutes of active timer time, a popup reminds you to step away. Timer pauses until you confirm. Toggle on/off from the <strong style="color:var(--accent);font-weight:500">···</strong> menu.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="sh"><h2>Section &amp; Task Management</h2><p>How to use the ··· menu</p></div>
+  <div class="features">
+
+    <div class="feat">
+      <div class="feat-icon">✓</div>
+      <div>
+        <h3>Mark a Section Done</h3>
+        <p>Hover over any section header — a checkmark icon appears on the left. Click it to check off all tasks in that section at once. Click again to uncheck them all.</p>
+      </div>
+    </div>
+
+    <div class="feat">
+      <div class="feat-icon">✅</div>
+      <div>
+        <h3>Mark All Done</h3>
+        <p><strong style="color:var(--accent);font-weight:500">···</strong> → <strong style="color:var(--ok);font-weight:500">Mark All Done</strong> — checks off every task in every section and every version in one action. A confirmation appears first.</p>
+        <span class="warn">Cannot be undone in bulk</span>
+      </div>
+    </div>
+
+    <div class="feat">
+      <div class="feat-icon">↕</div>
+      <div>
+        <h3>Move Tasks</h3>
+        <p><strong style="color:var(--accent);font-weight:500">···</strong> → <strong style="color:var(--accent);font-weight:500">Move Tasks</strong> — a move-mode bar appears at the top. Select a task, then choose which section to send it to.</p>
+      </div>
+    </div>
+
+    <div class="feat">
+      <div class="feat-icon">⚙</div>
+      <div>
+        <h3>Manage Sections</h3>
+        <p><strong style="color:var(--accent);font-weight:500">···</strong> → <strong style="color:var(--accent);font-weight:500">Manage Sections</strong> — add, rename, reorder, or delete sections. Adding a section auto-redistributes the time budget. Roadmap is always fixed at 4h.</p>
+      </div>
+    </div>
+
+    <div class="feat">
+      <div class="feat-icon">🕐</div>
+      <div>
+        <h3>Manage Time</h3>
+        <p><strong style="color:var(--accent);font-weight:500">···</strong> → <strong style="color:var(--accent);font-weight:500">Manage Time</strong> — adjust the time budget per section manually if the auto-distribution doesn't fit your workflow. Total stays within 40h.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="sh"><h2>Golden Rules</h2><p>What makes the data useful</p></div>
+  <div style="background:var(--bg-card);border:1px solid var(--border);border-left:2px solid var(--accent);border-radius:3px;padding:22px 26px;margin-bottom:40px">
+    <div style="font-family:var(--font-mono);font-size:10px;font-weight:700;color:var(--accent);letter-spacing:2.2px;text-transform:uppercase;margin-bottom:14px;opacity:.85">◆  non-negotiables</div>
+    <ul style="list-style:none;display:flex;flex-direction:column;gap:8px">
+      <li style="display:flex;gap:12px;align-items:flex-start;font-size:13.5px;color:var(--text2)"><span style="font-family:var(--font-mono);color:var(--accent);flex-shrink:0;font-size:11px;margin-top:3px;opacity:.6">→</span>Start your timer the moment you open a project. Stop it the moment you close or switch.</li>
+      <li style="display:flex;gap:12px;align-items:flex-start;font-size:13.5px;color:var(--text2)"><span style="font-family:var(--font-mono);color:var(--accent);flex-shrink:0;font-size:11px;margin-top:3px;opacity:.6">→</span>Check off tasks as you complete them — not at the end of the day.</li>
+      <li style="display:flex;gap:12px;align-items:flex-start;font-size:13.5px;color:var(--text2)"><span style="font-family:var(--font-mono);color:var(--accent);flex-shrink:0;font-size:11px;margin-top:3px;opacity:.6">→</span>One timer at a time. Switch sections → switch timers.</li>
+      <li style="display:flex;gap:12px;align-items:flex-start;font-size:13.5px;color:var(--text2)"><span style="font-family:var(--font-mono);color:var(--accent);flex-shrink:0;font-size:11px;margin-top:3px;opacity:.6">→</span>Adding a revision? Import the Frame.io comments — don't rebuild the checklist manually.</li>
+      <li style="display:flex;gap:12px;align-items:flex-start;font-size:13.5px;color:var(--text2)"><span style="font-family:var(--font-mono);color:var(--accent);flex-shrink:0;font-size:11px;margin-top:3px;opacity:.6">→</span>File name: <strong style="color:var(--accent);font-weight:500">LF-### [Title]</strong> — same ID everywhere.</li>
+      <li style="display:flex;gap:12px;align-items:flex-start;font-size:13.5px;color:var(--text2)"><span style="font-family:var(--font-mono);color:var(--accent);flex-shrink:0;font-size:11px;margin-top:3px;opacity:.6">→</span>Time data is for learning, not judgment. Be honest with it.</li>
+    </ul>
+  </div>
+
+  <div class="footer" style="justify-content:center">
+    <div style="font-family:var(--font-mono);font-size:11px;color:var(--text3);letter-spacing:2px;text-transform:uppercase">Every frame counts.</div>
+  </div>
+
+</div>
+</body>
+</html>
